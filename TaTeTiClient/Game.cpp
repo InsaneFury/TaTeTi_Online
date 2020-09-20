@@ -4,6 +4,15 @@ Game::Game()
 {
 	// Name you application
 	sAppName = "TaTeTi Online";
+	for (int i = 0; i < 9; i++)
+	{
+		ourDrawPos[i] = false;
+		enemyDrawPos[i] = false;
+	}
+	slotX = 60;
+	slotY = 60;
+	ourSkin = 'O';
+	enemySkin = 'X';
 }
 
 bool Game::OnUserCreate() 
@@ -18,8 +27,30 @@ bool Game::OnUserUpdate(float fElapsedTime)
 {
 	// Erase previous frame
 	Clear(olc::WHITE);
+	if (IsFocused())
+	{
+		if (GetKey(olc::Key::NP9).bPressed)
+			ourDrawPos[0] = true;
+		if (GetKey(olc::Key::NP8).bPressed)
+			ourDrawPos[1] = true;
+		if (GetKey(olc::Key::NP7).bPressed)
+			ourDrawPos[2] = true;
+		if (GetKey(olc::Key::NP6).bPressed)
+			ourDrawPos[3] = true;
+		if (GetKey(olc::Key::NP5).bPressed)
+			ourDrawPos[4] = true;
+		if (GetKey(olc::Key::NP4).bPressed)
+			ourDrawPos[5] = true;
+		if (GetKey(olc::Key::NP3).bPressed)
+			ourDrawPos[6] = true;
+		if (GetKey(olc::Key::NP2).bPressed)
+			ourDrawPos[7] = true;
+		if (GetKey(olc::Key::NP1).bPressed)
+			ourDrawPos[8] = true;
+	}
+	DrawBoardState();
 	DrawBoard();
-	DrawString(ScreenWidth()/2 - 50, ScreenHeight()/2 - 80, "TATETI ONLINE", olc::DARK_GREY);
+	DrawString(ScreenWidth() / 2 - 50, ScreenHeight() / 2 - 80, "TATETI ONLINE", olc::DARK_GREY);
 	return true;
 }
 
@@ -30,6 +61,7 @@ bool Game::OnUserDestroy()
 	delete client;
 	return true;
 }
+
 
 void Game::DrawBoard()
 {
@@ -55,4 +87,72 @@ void Game::DrawBoard()
 	DrawLine(inside + horizontalOffset, inside - insideOffset, inside + horizontalOffset, ScreenHeight() - inside + insideOffset, olc::DARK_GREY);
 	//Left Line
 	DrawLine(ScreenWidth() - inside - horizontalOffset, inside - insideOffset, ScreenWidth() - inside - horizontalOffset, ScreenHeight() - inside + insideOffset, olc::DARK_GREY);
+	
+}
+
+void Game::DrawBoardState()
+{	
+	if (ourDrawPos[0] == true) {
+		DrawString(slotX, slotY, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[1] == true) {
+		DrawString(slotX + 33, slotY, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[2] == true) {
+		DrawString(slotX + 68, slotY, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[3] == true) {
+		DrawString(slotX, slotY + 33, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[4] == true) {
+		DrawString(slotX + 33, slotY + 33, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[5] == true) {
+		DrawString(slotX + 68, slotY + 33, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[6] == true) {
+		DrawString(slotX, slotY + 68, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[7] == true) {
+		DrawString(slotX + 33, slotY + 68, ourSkin, olc::RED, 2);
+	}
+	if (ourDrawPos[8] == true) {
+		DrawString(slotX + 68, slotY + 68, ourSkin, olc::RED, 2);
+	}
+
+	if (enemyDrawPos[0] == true) {
+		DrawString(slotX, slotY, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[1] == true) {
+		DrawString(slotX + 33, slotY, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[2] == true) {
+		DrawString(slotX + 68, slotY, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[3] == true) {
+		DrawString(slotX, slotY + 33, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[4] == true) {
+		DrawString(slotX + 33, slotY + 33, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[5] == true) {
+		DrawString(slotX + 68, slotY + 33, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[6] == true) {
+		DrawString(slotX, slotY + 68, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[7] == true) {
+		DrawString(slotX + 33, slotY + 68, enemySkin, olc::RED, 2);
+	}
+	if (enemyDrawPos[8] == true) {
+		DrawString(slotX + 68, slotY + 68, enemySkin, olc::RED, 2);
+	}
+}
+
+void Game::SetDrawPos(bool playerTurn,int pos)
+{
+	if (playerTurn)
+		ourDrawPos[pos] = true;
+	else
+		enemyDrawPos[pos] = true;
 }
