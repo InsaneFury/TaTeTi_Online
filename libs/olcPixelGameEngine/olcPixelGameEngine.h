@@ -244,6 +244,7 @@ int main()
 // | STANDARD INCLUDES                                                            |
 // O------------------------------------------------------------------------------O
 #include <cmath>
+#include <iostream>
 #include <cstdint>
 #include <string>
 #include <streambuf>
@@ -2345,8 +2346,8 @@ namespace olc
 		{
 			if (c == '\n') { pos.y++;  pos.x = 0; }
 			else pos.x++;
-			size.x = max(size.x, pos.x);
-			size.y = max(size.y, pos.y);
+			size.x = fmax(size.x, pos.x);
+			size.y = fmax(size.y, pos.y);
 		}
 		return size * 8;
 	}

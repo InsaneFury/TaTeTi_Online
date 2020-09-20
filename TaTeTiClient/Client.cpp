@@ -27,6 +27,7 @@ void Client::Initialize()
 
 	// Socket Creation
 	out = socket(AF_INET, SOCK_DGRAM, 0);
+	SendMSG("HELLO THERE");
 }
 
 void Client::SendMSG(std::string msg)
