@@ -1,10 +1,7 @@
-#pragma once
+#ifndef CLIENT_H
+#define CLIENT_H
 #include <iostream>
 #include <WS2tcpip.h>
-
-#pragma comment (lib,"ws2_32.lib")
-
-using namespace std;
 
 class Client
 {
@@ -25,12 +22,10 @@ public:
 	Client(int _port);
 
 	// Startup Winsock
-	void Initialize(int argc, char* argv[]);
+	void Initialize();
 
 	
-	
-	
-	// Close the socket
+	void SendMSG(std::string msg);
 
 	// Bind socket to ip address and port
 	//void BindSocket();
@@ -44,4 +39,6 @@ public:
 	// Shutdown winsock
 	void Shutdown();
 };
+
+#endif // CLIENT_H
 
