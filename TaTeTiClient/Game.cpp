@@ -19,6 +19,7 @@ bool Game::OnUserUpdate(float fElapsedTime)
 	// Erase previous frame
 	Clear(olc::WHITE);
 	DrawBoard();
+	DrawString(ScreenWidth()/2 - 50, ScreenHeight()/2 - 80, "TATETI ONLINE", olc::DARK_GREY);
 	return true;
 }
 
