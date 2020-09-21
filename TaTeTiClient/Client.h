@@ -10,13 +10,18 @@ private:
 	WSADATA data;
 	WORD version;
 	int port;
-	SOCKET out;
+	SOCKET sock = INVALID_SOCKET;
+	sockaddr_in server;
+	hostent host;
 
 	// Server Data
-	sockaddr_in server;
+	sockaddr_in from;
+	char dataBuffer[1024];
+	int dataLenght;
+	char serverIp[256];
 
 private:
-	//void ShowReceivedMessage();
+	void ShowReceivedMessage();
 
 public:
 	Client(int _port);
@@ -28,12 +33,12 @@ public:
 	void SendMSG(std::string msg);
 
 	// Bind socket to ip address and port
-	//void BindSocket();
+	void BindSocket();
 
 	// Enter a loop
 	// Wait for message
 	// Display message and client info
-	//void ListenForMessages();
+	void ListenForMessages();
 
 	// Close socket
 	// Shutdown winsock

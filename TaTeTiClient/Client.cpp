@@ -2,6 +2,7 @@
 #include <string>
 
 
+
 Client::Client(int _port)
 	:
 	port(_port)
@@ -19,28 +20,60 @@ void Client::Initialize()
 	}
 	std::cout << "CLIENT_DEBUG : Client initialized correctly!" << std::endl;
 
-	// Create a hint structure for the server
+	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
-
 	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
-	// Socket Creation
-	out = socket(AF_INET, SOCK_DGRAM, 0);
+	//BindSocket();
+	SendMSG("Connected");
+
 }
 
 void Client::SendMSG(std::string msg)
 {
 	// Write out to that socket
-	int sendOk = sendto(out, msg.c_str(), msg.size() + 1, 0, (sockaddr*)&server, sizeof(server));
+	int sendOk = sendto(sock, msg.c_str(), msg.size() + 1, 0, (sockaddr*)&server, sizeof(server));
 	if (sendOk == SOCKET_ERROR)
 	{
 		std::cout << " CLIENT_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
 	}
 }
 
+void Client::BindSocket()
+{
+
+	dataLenght = sizeof(from);
+	ZeroMemory(&from, dataLenght);
+	ZeroMemory(dataBuffer, 1024);	
+}
+
+void Client::ListenForMessages()
+{
+	dataLenght = sizeof(from);
+	ZeroMemory(&from, dataLenght);
+	ZeroMemory(dataBuffer, 1024);
+
+	int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
+	if (bytesIn == SOCKET_ERROR)
+	{
+		std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
+	}
+	else {
+		ZeroMemory(serverIp, 256);
+		ShowReceivedMessage();
+	}
+	
+}
+
+void Client::ShowReceivedMessage()
+{
+	inet_ntop(AF_INET, &from.sin_addr, serverIp, 256);
+	std::cout << "Message recv from " << serverIp << " : " << dataBuffer << std::endl;
+}
+
 void Client::Shutdown()
 {
-	closesocket(out);
+	closesocket(sock);
 	WSACleanup();
 }

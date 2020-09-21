@@ -13,6 +13,7 @@ Game::Game()
 	slotY = 60;
 	ourSkin = 'O';
 	enemySkin = 'X';
+	gameStarted = true;
 }
 
 bool Game::OnUserCreate() 
@@ -27,29 +28,38 @@ bool Game::OnUserUpdate(float fElapsedTime)
 {
 	// Erase previous frame
 	Clear(olc::WHITE);
-	if (IsFocused())
-	{
-		if (GetKey(olc::Key::NP9).bPressed)
-			ourDrawPos[0] = true;
-		if (GetKey(olc::Key::NP8).bPressed)
-			ourDrawPos[1] = true;
-		if (GetKey(olc::Key::NP7).bPressed)
-			ourDrawPos[2] = true;
-		if (GetKey(olc::Key::NP6).bPressed)
-			ourDrawPos[3] = true;
-		if (GetKey(olc::Key::NP5).bPressed)
-			ourDrawPos[4] = true;
-		if (GetKey(olc::Key::NP4).bPressed)
-			ourDrawPos[5] = true;
-		if (GetKey(olc::Key::NP3).bPressed)
-			ourDrawPos[6] = true;
-		if (GetKey(olc::Key::NP2).bPressed)
-			ourDrawPos[7] = true;
-		if (GetKey(olc::Key::NP1).bPressed)
-			ourDrawPos[8] = true;
-	}
+	if (gameStarted) {
+		if (IsFocused())
+		{
+			if (GetKey(olc::Key::NP9).bPressed)
+				ourDrawPos[0] = true;
+			if (GetKey(olc::Key::NP8).bPressed)
+				ourDrawPos[1] = true;
+			if (GetKey(olc::Key::NP7).bPressed)
+				ourDrawPos[2] = true;
+			if (GetKey(olc::Key::NP6).bPressed)
+				ourDrawPos[3] = true;
+			if (GetKey(olc::Key::NP5).bPressed)
+				ourDrawPos[4] = true;
+			if (GetKey(olc::Key::NP4).bPressed)
+				ourDrawPos[5] = true;
+			if (GetKey(olc::Key::NP3).bPressed)
+				ourDrawPos[6] = true;
+			if (GetKey(olc::Key::NP2).bPressed)
+				ourDrawPos[7] = true;
+			if (GetKey(olc::Key::NP1).bPressed) {
+				client->SendMSG("4");
+				ourDrawPos[8] = true;
+			}
+		}
 	DrawBoardState();
 	DrawBoard();
+		if (gameOver) 
+		{
+			//GameOver Screen
+		}
+	client->ListenForMessages();
+	}
 	DrawString(ScreenWidth() / 2 - 50, ScreenHeight() / 2 - 80, "TATETI ONLINE", olc::DARK_GREY);
 	return true;
 }
@@ -155,4 +165,17 @@ void Game::SetDrawPos(bool playerTurn,int pos)
 		ourDrawPos[pos] = true;
 	else
 		enemyDrawPos[pos] = true;
+}
+
+void Game::GameOver(bool playerWon)
+{
+	if (playerWon)
+		won = true;
+	else
+		won = false;
+}
+
+void Game::SetClientID(int _ID)
+{
+	ID = _ID;
 }

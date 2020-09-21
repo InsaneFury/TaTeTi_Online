@@ -12,15 +12,15 @@ private:
 	// Server Data
 	WSADATA data;
 	WORD version;
-	SOCKET inSocket;
-	sockaddr_in serverHint;
+	SOCKET sock;
+	sockaddr_in server;
 	int port;
 	bool shutdown = false;
 
 	// Client Data
-	sockaddr_in client;
-	char clientBuffer[1024];
-	int clientLenght;
+	sockaddr_in from;
+	char dataBuffer[1024];
+	int dataLenght;
 	char clientIp[256];
 
 private:
@@ -39,6 +39,8 @@ public:
 	// Wait for message
 	// Display message and client info
 	void ListenForMessages();
+
+	void SendMSG(std::string msg);
 
 	void Shutdown();
 	// Close socket
