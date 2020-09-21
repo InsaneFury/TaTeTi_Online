@@ -8,6 +8,12 @@ using namespace std;
 
 class Server
 {
+	struct PlayerData
+	{
+		int input;
+		std::string name;
+		int ID;
+	};
 private:
 	// Server Data
 	WSADATA data;
@@ -22,6 +28,7 @@ private:
 	char dataBuffer[1024];
 	int dataLenght;
 	char clientIp[256];
+	PlayerData playerData;
 
 private:
 	void ShowReceivedMessage();

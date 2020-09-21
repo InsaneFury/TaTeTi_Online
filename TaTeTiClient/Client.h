@@ -5,6 +5,13 @@
 
 class Client
 {
+	struct PlayerData
+	{
+		int input;
+		std::string name;
+		int ID;
+	};
+
 private:
 	// Client Data
 	WSADATA data;
@@ -12,7 +19,7 @@ private:
 	int port;
 	SOCKET sock = INVALID_SOCKET;
 	sockaddr_in server;
-	hostent host;
+	PlayerData playerData;
 
 	// Server Data
 	sockaddr_in from;
@@ -29,7 +36,7 @@ public:
 	// Startup Winsock
 	void Initialize();
 	
-	void SendMSG(std::string msg);
+	void SendMSG();
 
 	// Enter a loop
 	// Wait for message

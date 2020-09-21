@@ -47,7 +47,7 @@ void Server::ListenForMessages()
 	while (!shutdown)
 	{
 		ZeroMemory(dataBuffer, 1024);
-		int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
+		int bytesIn = recvfrom(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
 		if(bytesIn == SOCKET_ERROR)
 		{
 			cout << "Error receiving from client " << WSAGetLastError() << endl;
@@ -73,7 +73,7 @@ void Server::SendMSG(std::string msg)
 void Server::ShowReceivedMessage()
 {
 	inet_ntop(AF_INET, &from.sin_addr, clientIp, 256);
-	cout << "Message recv from " << clientIp << " : " << dataBuffer << endl;
+	cout << "Message recv from " << clientIp << " : " << playerData.name << endl;
 }
 
 void Server::Shutdown()

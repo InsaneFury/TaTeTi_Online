@@ -25,14 +25,16 @@ void Client::Initialize()
 	server.sin_port = htons(port);
 	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
-	SendMSG("Connected");
+	std::cout << "Ingrese su nombre: " << std::endl;
+	std::getline(std::cin, playerData.name);
+	SendMSG();
 	ListenForMessages();
 }
 
-void Client::SendMSG(std::string msg)
+void Client::SendMSG()
 {
 	// Write out to that socket
-	int sendOk = sendto(sock, msg.c_str(), msg.size() + 1, 0, (sockaddr*)&server, sizeof(server));
+	int sendOk = sendto(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&server, sizeof(server));
 	if (sendOk == SOCKET_ERROR)
 	{
 		std::cout << " CLIENT_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
