@@ -25,7 +25,7 @@ void Client::Initialize()
 	server.sin_port = htons(port);
 	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
-	//BindSocket();
+	
 	SendMSG("Connected");
 
 }

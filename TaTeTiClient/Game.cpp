@@ -31,23 +31,23 @@ bool Game::OnUserUpdate(float fElapsedTime)
 	if (gameStarted) {
 		if (IsFocused())
 		{
-			if (GetKey(olc::Key::NP9).bPressed)
+			if (GetKey(olc::Key::NP7).bPressed)
 				ourDrawPos[0] = true;
 			if (GetKey(olc::Key::NP8).bPressed)
 				ourDrawPos[1] = true;
-			if (GetKey(olc::Key::NP7).bPressed)
+			if (GetKey(olc::Key::NP9).bPressed)
 				ourDrawPos[2] = true;
-			if (GetKey(olc::Key::NP6).bPressed)
+			if (GetKey(olc::Key::NP4).bPressed)
 				ourDrawPos[3] = true;
 			if (GetKey(olc::Key::NP5).bPressed)
 				ourDrawPos[4] = true;
-			if (GetKey(olc::Key::NP4).bPressed)
+			if (GetKey(olc::Key::NP6).bPressed)
 				ourDrawPos[5] = true;
-			if (GetKey(olc::Key::NP3).bPressed)
+			if (GetKey(olc::Key::NP1).bPressed)
 				ourDrawPos[6] = true;
 			if (GetKey(olc::Key::NP2).bPressed)
 				ourDrawPos[7] = true;
-			if (GetKey(olc::Key::NP1).bPressed) {
+			if (GetKey(olc::Key::NP3).bPressed) {
 				client->SendMSG("4");
 				ourDrawPos[8] = true;
 			}
