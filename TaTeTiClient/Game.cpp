@@ -31,24 +31,49 @@ bool Game::OnUserUpdate(float fElapsedTime)
 	if (gameStarted) {
 		if (IsFocused())
 		{
-			if (GetKey(olc::Key::NP7).bPressed)
+			if (GetKey(olc::Key::NP7).bPressed) {
+				client->SendMSG("7");
+				client->ListenForMessages();
 				ourDrawPos[0] = true;
-			if (GetKey(olc::Key::NP8).bPressed)
+			}
+			if (GetKey(olc::Key::NP8).bPressed) {
+				client->SendMSG("8");
+				client->ListenForMessages();
 				ourDrawPos[1] = true;
-			if (GetKey(olc::Key::NP9).bPressed)
+			}
+			if (GetKey(olc::Key::NP9).bPressed) {
+				client->SendMSG("9");
+				client->ListenForMessages();
 				ourDrawPos[2] = true;
-			if (GetKey(olc::Key::NP4).bPressed)
+			}
+			if (GetKey(olc::Key::NP4).bPressed) {
+				client->SendMSG("4");
+				client->ListenForMessages();
 				ourDrawPos[3] = true;
-			if (GetKey(olc::Key::NP5).bPressed)
+			}
+			if (GetKey(olc::Key::NP5).bPressed) {
+				client->SendMSG("5");
+				client->ListenForMessages();
 				ourDrawPos[4] = true;
-			if (GetKey(olc::Key::NP6).bPressed)
+			}
+			if (GetKey(olc::Key::NP6).bPressed) {
+				client->SendMSG("6");
+				client->ListenForMessages();
 				ourDrawPos[5] = true;
-			if (GetKey(olc::Key::NP1).bPressed)
+			}
+			if (GetKey(olc::Key::NP1).bPressed) {
+				client->SendMSG("1");
+				client->ListenForMessages();
 				ourDrawPos[6] = true;
-			if (GetKey(olc::Key::NP2).bPressed)
+			}
+			if (GetKey(olc::Key::NP2).bPressed) {
+				client->SendMSG("2");
+				client->ListenForMessages();
+			}
 				ourDrawPos[7] = true;
 			if (GetKey(olc::Key::NP3).bPressed) {
-				client->SendMSG("4");
+				client->SendMSG("3");
+				client->ListenForMessages();
 				ourDrawPos[8] = true;
 			}
 		}
@@ -58,7 +83,6 @@ bool Game::OnUserUpdate(float fElapsedTime)
 		{
 			//GameOver Screen
 		}
-	client->ListenForMessages();
 	}
 	DrawString(ScreenWidth() / 2 - 50, ScreenHeight() / 2 - 80, "TATETI ONLINE", olc::DARK_GREY);
 	return true;
