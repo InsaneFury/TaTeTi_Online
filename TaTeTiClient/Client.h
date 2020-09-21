@@ -28,12 +28,8 @@ public:
 
 	// Startup Winsock
 	void Initialize();
-
 	
 	void SendMSG(std::string msg);
-
-	// Bind socket to ip address and port
-	void BindSocket();
 
 	// Enter a loop
 	// Wait for message

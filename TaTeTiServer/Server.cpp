@@ -56,7 +56,7 @@ void Server::ListenForMessages()
 		
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
-		//SendMSG("Connected Successfully to the server");
+		SendMSG("Connected Successfully to the server");
 	}
 }
 

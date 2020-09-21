@@ -40,14 +40,6 @@ void Client::SendMSG(std::string msg)
 	}
 }
 
-void Client::BindSocket()
-{
-
-	dataLenght = sizeof(from);
-	ZeroMemory(&from, dataLenght);
-	ZeroMemory(dataBuffer, 1024);	
-}
-
 void Client::ListenForMessages()
 {
 	dataLenght = sizeof(from);
