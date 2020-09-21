@@ -10,9 +10,10 @@ class Server
 {
 	struct PlayerData
 	{
-		int input;
-		std::string name;
-		int ID;
+		int input = 0;
+		std::string name = "";
+		std::string gameState = "";
+		int ID = 0;
 	};
 private:
 	// Server Data
@@ -47,7 +48,7 @@ public:
 	// Display message and client info
 	void ListenForMessages();
 
-	void SendMSG(std::string msg);
+	void SendMSG();
 
 	void Shutdown();
 	// Close socket

@@ -7,9 +7,10 @@ class Client
 {
 	struct PlayerData
 	{
-		int input;
-		std::string name;
-		int ID;
+		int input = 0;
+		std::string name = "";
+		std::string gameState = "";
+		int ID = 0;
 	};
 
 private:

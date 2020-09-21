@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <string>
 
 Server::Server(int _port)
 	:
@@ -39,14 +40,12 @@ void Server::BindSocket()
 
 	dataLenght = sizeof(from);
 	ZeroMemory(&from, dataLenght);
-	ZeroMemory(dataBuffer, 1024);
 }
 
 void Server::ListenForMessages()
 {
 	while (!shutdown)
 	{
-		ZeroMemory(dataBuffer, 1024);
 		int bytesIn = recvfrom(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
 		if(bytesIn == SOCKET_ERROR)
 		{
@@ -56,14 +55,16 @@ void Server::ListenForMessages()
 		
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
-		SendMSG("Connected Successfully to the server");
+
+		SendMSG();
 	}
 }
 
-void Server::SendMSG(std::string msg)
+void Server::SendMSG()
 {
+	playerData.ID = 9;
 	// Write out to that socket
-	int sendOk = sendto(sock, msg.c_str(), msg.size() + 1, 0, (sockaddr*)&from, sizeof(from));
+	int sendOk = sendto(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, sizeof(from));
 	if (sendOk == SOCKET_ERROR)
 	{
 		std::cout << " SERVER_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
