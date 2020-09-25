@@ -24,9 +24,16 @@ void Client::Initialize()
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
-	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+	inet_pton(AF_INET, "181.26.25.219", &server.sin_addr);
 
 	WSAEventSelect(sock, EventHandler, (FD_READ | FD_CONNECT | FD_CLOSE));
+
+	if (connect(sock, (sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
+	{ // an error connecting has occurred!
+		std::cout << "Connected to the server!" << std::endl;
+		WSACleanup();
+		return;
+	}
 
 	std::cout << "Ingrese su nombre: " << std::endl;
 	std::getline(std::cin, playerData.name);
@@ -55,12 +62,17 @@ void Client::ListenForMessages()
 	//int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
 	if (bytesIn == SOCKET_ERROR)
 	{
-		return;
 		//std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
 	}
 	else {
 		ZeroMemory(serverIp, 256);
 		ShowReceivedMessage();
+	}
+	if (bytesIn == 0) {
+		std::cout<<"Connection with server closed"<< std::endl;
+		closesocket(sock);
+		WSACleanup();
+		exit(1);
 	}
 }
 

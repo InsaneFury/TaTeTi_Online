@@ -22,6 +22,7 @@ private:
 	sockaddr_in server;
 	PlayerData playerData;
 	HANDLE EventHandler; 
+	SOCKET connectionSocket;
 
 	// Server Data
 	sockaddr_in from;
