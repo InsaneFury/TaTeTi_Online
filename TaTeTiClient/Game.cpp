@@ -18,7 +18,6 @@ Game::Game()
 
 bool Game::OnUserCreate() 
 {
-	// Called once at the start, so create things here
 	client = new Client(8900);
 	client->Initialize();
 	return true;
@@ -28,6 +27,7 @@ bool Game::OnUserUpdate(float fElapsedTime)
 {
 	// Erase previous frame
 	Clear(olc::WHITE);
+	client->ListenForMessages();
 	if (gameStarted) {
 		if (IsFocused())
 		{

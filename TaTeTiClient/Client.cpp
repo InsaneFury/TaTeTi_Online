@@ -1,3 +1,4 @@
+#define WM_ONSOCKET WM_USER+1
 #include "Client.h"
 #include <string>
 
@@ -25,10 +26,12 @@ void Client::Initialize()
 	server.sin_port = htons(port);
 	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
+	WSAEventSelect(sock, EventHandler, (FD_READ | FD_CONNECT | FD_CLOSE));
+
 	std::cout << "Ingrese su nombre: " << std::endl;
 	std::getline(std::cin, playerData.name);
+	//std::cin >> dataBuffer;
 	SendMSG();
-	ListenForMessages();
 }
 
 void Client::SendMSG()
@@ -41,28 +44,34 @@ void Client::SendMSG()
 	}
 }
 
+
+
 void Client::ListenForMessages()
 {
 	dataLenght = sizeof(from);
 	ZeroMemory(&from, dataLenght);
-	ZeroMemory(dataBuffer, 1024);
 
 	int bytesIn = recvfrom(sock, (char*)&playerData,sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
+	//int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
 	if (bytesIn == SOCKET_ERROR)
 	{
-		std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
+		return;
+		//std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
 	}
 	else {
 		ZeroMemory(serverIp, 256);
 		ShowReceivedMessage();
 	}
-	
+}
+
+void Client::ListenForEvents()
+{
 }
 
 void Client::ShowReceivedMessage()
 {
 	inet_ntop(AF_INET, &from.sin_addr, serverIp, 256);
-	std::cout << "Message recv from " << serverIp << " : " << playerData.ID << std::endl;
+	std::cout << "Message recv from " << serverIp << " : " << playerData.name << std::endl;
 }
 
 void Client::Shutdown()

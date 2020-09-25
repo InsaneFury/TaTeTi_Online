@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <map>
 #include <WS2tcpip.h>
 
 #pragma comment (lib,"ws2_32.lib")
@@ -23,6 +24,9 @@ private:
 	sockaddr_in server;
 	int port;
 	bool shutdown = false;
+	
+	// Multiple Clients
+	map<unsigned int, SOCKET> Clients;
 
 	// Client Data
 	sockaddr_in from;

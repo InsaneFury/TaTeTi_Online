@@ -21,6 +21,7 @@ private:
 	SOCKET sock = INVALID_SOCKET;
 	sockaddr_in server;
 	PlayerData playerData;
+	HANDLE EventHandler; 
 
 	// Server Data
 	sockaddr_in from;
@@ -44,6 +45,7 @@ public:
 	// Display message and client info
 	void ListenForMessages();
 
+	void ListenForEvents();
 	// Close socket
 	// Shutdown winsock
 	void Shutdown();

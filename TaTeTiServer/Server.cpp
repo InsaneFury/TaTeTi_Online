@@ -1,3 +1,4 @@
+
 #include "Server.h"
 #include <string>
 
@@ -27,6 +28,7 @@ void Server::Initialize()
 	server.sin_addr.S_un.S_addr = ADDR_ANY;
 	server.sin_port = htons(port);
 	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+
 }
 
 void Server::BindSocket()
@@ -45,24 +47,25 @@ void Server::BindSocket()
 void Server::ListenForMessages()
 {
 	while (!shutdown)
-	{
+	{	
 		int bytesIn = recvfrom(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
-		if(bytesIn == SOCKET_ERROR)
+		if (bytesIn == SOCKET_ERROR)
 		{
+			// Drop the client
+			closesocket(sock);
 			cout << "Error receiving from client " << WSAGetLastError() << endl;
-			continue;
 		}
-		
-		ZeroMemory(clientIp, 256);
-		ShowReceivedMessage();
-
-		SendMSG();
+		else {
+			ZeroMemory(clientIp, 256);
+			ShowReceivedMessage();
+			SendMSG();
+		}
 	}
 }
 
 void Server::SendMSG()
 {
-	playerData.ID = 9;
+
 	// Write out to that socket
 	int sendOk = sendto(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, sizeof(from));
 	if (sendOk == SOCKET_ERROR)
