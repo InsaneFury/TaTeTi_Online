@@ -2,8 +2,6 @@
 #include "Client.h"
 #include <string>
 
-
-
 Client::Client(int _port)
 	:
 	port(_port)
@@ -24,7 +22,7 @@ void Client::Initialize()
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
-	inet_pton(AF_INET, "181.26.25.219", &server.sin_addr);
+	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
 	WSAEventSelect(sock, EventHandler, (FD_READ | FD_CONNECT | FD_CLOSE));
 
@@ -36,15 +34,17 @@ void Client::Initialize()
 	}
 
 	std::cout << "Ingrese su nombre: " << std::endl;
-	std::getline(std::cin, playerData.name);
-	//std::cin >> dataBuffer;
-	SendMSG();
+	std::string name;
+	std::getline(std::cin, name);
+	player.SetName(name);
+
+	SendMessageToServer();
 }
 
-void Client::SendMSG()
+void Client::SendMessageToServer()
 {
 	// Write out to that socket
-	int sendOk = sendto(sock, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&server, sizeof(server));
+	int sendOk = sendto(sock, (char*)&player, sizeof(player), 0, (sockaddr*)&server, sizeof(server));
 	if (sendOk == SOCKET_ERROR)
 	{
 		std::cout << " CLIENT_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
@@ -53,26 +53,26 @@ void Client::SendMSG()
 
 
 
-void Client::ListenForMessages()
+bool Client::ListenForMessages()
 {
 	dataLenght = sizeof(from);
 	ZeroMemory(&from, dataLenght);
 
-	int bytesIn = recvfrom(sock, (char*)&playerData,sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
-	//int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
-	if (bytesIn == SOCKET_ERROR)
-	{
-		//std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
-	}
-	else {
-		ZeroMemory(serverIp, 256);
-		ShowReceivedMessage();
-	}
+	int bytesIn = recvfrom(sock, (char*)&player,sizeof(player), 0, (sockaddr*)&from, &dataLenght);
 	if (bytesIn == 0) {
 		std::cout<<"Connection with server closed"<< std::endl;
 		closesocket(sock);
 		WSACleanup();
 		exit(1);
+	}
+	else {	
+		return true;
+	}
+	//int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
+	if (bytesIn == SOCKET_ERROR)
+	{
+		return false;
+		//std::cout << "Error receiving from client " << WSAGetLastError() << std::endl;
 	}
 }
 
@@ -82,8 +82,9 @@ void Client::ListenForEvents()
 
 void Client::ShowReceivedMessage()
 {
+	ZeroMemory(serverIp, 256);
 	inet_ntop(AF_INET, &from.sin_addr, serverIp, 256);
-	std::cout << "Message recv from " << serverIp << " : " << playerData.name << std::endl;
+	std::cout << "Message recv from " << serverIp << " : " << player.GetInput() << std::endl;
 }
 
 void Client::Shutdown()

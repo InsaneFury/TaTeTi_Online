@@ -9,6 +9,10 @@ Server::Server(int _port)
 	clientSocket(INVALID_SOCKET),
 	client_ID(0)
 {
+	for (int i = 0; i < 8; i++)
+	{
+		boardPositions[i] = 0;
+	}
 }
 
 Server::~Server()
@@ -33,9 +37,9 @@ void Server::Start()
 		cout << "SERVER_DEBUG : Error openning socket" << endl;
 	}
 	server.sin_family = AF_INET;
-	server.sin_addr.S_un.S_addr = INADDR_ANY;
+	server.sin_addr.S_un.S_addr = ADDR_ANY;
 	server.sin_port = htons(port);
-	inet_pton(AF_INET, "192.168.1.38", &server.sin_addr);
+	//inet_pton(AF_INET, "192.168.1.38", &server.sin_addr); not neccesary because im using ADDR_ANY
 
 
 	BindSocket();
@@ -58,7 +62,7 @@ void Server::Update()
 {
 	if (AcceptNewClient(client_ID))
 	{
-		cout << "Client " + client_ID + playerData.name + " has been connected to the server" << endl;
+		cout << "Client " + client_ID + player.GetName() + " has been connected to the server" << endl;
 		cout << "Total Clients Connected: " + client_ID + 1 << endl;
 		client_ID++;
 	}
@@ -78,7 +82,7 @@ bool Server::AcceptNewClient(unsigned int& id)
 
 void Server::ListenForMessages()
 {
-	int bytesIn = recvfrom(listenSocket, (char*)&playerData, sizeof(playerData), 0, (sockaddr*)&from, &dataLenght);
+	int bytesIn = recvfrom(listenSocket, (char*)&player, sizeof(player), 0, (sockaddr*)&from, &dataLenght);
 	if (bytesIn == SOCKET_ERROR)
 	{
 		// Drop the client
@@ -88,21 +92,24 @@ void Server::ListenForMessages()
 	else 
 	{
 		ZeroMemory(clientIp, 256);
-		ShowReceivedMessage();			
-		SendMessageTo(listenSocket,playerData,from);
+		ShowReceivedMessage();
+
+		//TEST
+		if(IsPositionAvailable(player.GetInput()))
+		SendMessageTo(listenSocket, player,from);
 	}	
 }
 
-int Server::SendMessageTo(SOCKET _currentSocket, PlayerData _playerData,sockaddr_in _from)
+int Server::SendMessageTo(SOCKET _currentSocket, Player _player,sockaddr_in _from)
 {
-	int sendOk = sendto(_currentSocket, (char*)&_playerData, sizeof(_playerData), 0, (sockaddr*)&_from, sizeof(_from));
+	int sendOk = sendto(_currentSocket, (char*)&_player, sizeof(_player), 0, (sockaddr*)&_from, sizeof(_from));
 	if (sendOk == SOCKET_ERROR)
 	std::cout << " SERVER_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
 
 	return sendOk;
 }
 
-int Server::SendMessageToAll(SOCKET _currentSocket, PlayerData _playerData)
+int Server::SendMessageToAll(SOCKET _currentSocket, Player _player)
 {
 	SOCKET currentSocket;
 	std::map<unsigned int, SOCKET>::iterator iter;
@@ -111,7 +118,7 @@ int Server::SendMessageToAll(SOCKET _currentSocket, PlayerData _playerData)
 	for (iter = clients_sockets.begin(); iter != clients_sockets.end(); iter++)
 	{
 		currentSocket = iter->second;
-		iSendResult = SendMessageTo(currentSocket, playerData, from);
+		iSendResult = SendMessageTo(currentSocket, _player, from);
 
 		if (iSendResult == SOCKET_ERROR)
 		{
@@ -126,7 +133,7 @@ int Server::SendMessageToAll(SOCKET _currentSocket, PlayerData _playerData)
 void Server::ShowReceivedMessage()
 {
 	inet_ntop(AF_INET, &from.sin_addr, clientIp, 256);
-	cout << "Message recv from " << clientIp << " : " << playerData.name << endl;
+	cout << "Message recv from " << clientIp << " : " << player.GetInput() << endl;
 }
 
 void Server::Shutdown()
@@ -138,4 +145,14 @@ void Server::Shutdown()
 		closesocket(clientSocket);
 	
 	WSACleanup();
+}
+
+bool Server::IsPositionAvailable(int pos)
+{
+	if (boardPositions[pos] == 0)
+	{
+		boardPositions[pos] = pos;
+		return true;
+	}
+	return false;
 }

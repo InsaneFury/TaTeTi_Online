@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\TaTeTiClient\Player.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\TaTeTiClient\Player.h" />
+    <ClInclude Include="NetworkServices.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

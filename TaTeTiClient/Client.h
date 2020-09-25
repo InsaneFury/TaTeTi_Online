@@ -2,17 +2,10 @@
 #define CLIENT_H
 #include <iostream>
 #include <WS2tcpip.h>
+#include "Player.h"
 
 class Client
 {
-	struct PlayerData
-	{
-		int input = 0;
-		std::string name = "";
-		std::string gameState = "";
-		int ID = 0;
-	};
-
 private:
 	// Client Data
 	WSADATA data;
@@ -20,9 +13,8 @@ private:
 	int port;
 	SOCKET sock = INVALID_SOCKET;
 	sockaddr_in server;
-	PlayerData playerData;
-	HANDLE EventHandler; 
 	SOCKET connectionSocket;
+	HANDLE EventHandler;
 
 	// Server Data
 	sockaddr_in from;
@@ -31,20 +23,21 @@ private:
 	char serverIp[256];
 
 private:
-	void ShowReceivedMessage();
 
 public:
+	Player player;
 	Client(int _port);
 
 	// Startup Winsock
 	void Initialize();
 	
-	void SendMSG();
+	void SendMessageToServer();
 
+	void ShowReceivedMessage();
 	// Enter a loop
 	// Wait for message
 	// Display message and client info
-	void ListenForMessages();
+	bool ListenForMessages();
 
 	void ListenForEvents();
 	// Close socket

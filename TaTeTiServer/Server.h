@@ -3,20 +3,14 @@
 #include <map>
 #include <vector>
 #include <WS2tcpip.h>
+#include "Player.h"
 
 #pragma comment (lib,"ws2_32.lib")
 
 using namespace std;
 
 class Server
-{
-	struct PlayerData
-	{
-		int input = 0;
-		std::string name = "";
-		std::string gameState = "";
-		int ID = 0;
-	};
+{	
 private:
 	// Server Data
 	WSADATA data;
@@ -26,6 +20,7 @@ private:
 	int port;
 	bool shutdown = false;
 	unsigned int client_ID;
+	bool boardPositions[8];
 
 	// Multiple Clients
 	map<unsigned int, SOCKET> clients_sockets;
@@ -38,7 +33,7 @@ private:
 	char dataBuffer[1024];
 	int dataLenght;
 	char clientIp[256];
-	PlayerData playerData;
+	Player player;
 
 private:
 	void ShowReceivedMessage();
@@ -56,10 +51,12 @@ public:
 	//Accept new client and add it to the map
 	bool AcceptNewClient(unsigned int& id);
 	void ListenForMessages();
-	int SendMessageTo(SOCKET _currentSocket, PlayerData _playerData, sockaddr_in _from);
-	int SendMessageToAll(SOCKET _currentSocket, PlayerData _playerData);
+	int SendMessageTo(SOCKET _currentSocket, Player _player, sockaddr_in _from);
+	int SendMessageToAll(SOCKET _currentSocket, Player _player);
 
 	// Shutdown winsock & Close socket
 	void Shutdown();
+
+	bool IsPositionAvailable(int pos);
 };
 

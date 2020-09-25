@@ -32,49 +32,67 @@ bool Game::OnUserUpdate(float fElapsedTime)
 		if (IsFocused())
 		{
 			if (GetKey(olc::Key::NP7).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[0] = true;
+				client->player.SetInput(1);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP8).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[1] = true;
+				client->player.SetInput(2);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP9).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[2] = true;
+				client->player.SetInput(3);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP4).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[3] = true;
+				client->player.SetInput(4);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP5).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[4] = true;
+				client->player.SetInput(5);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP6).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[5] = true;
+				client->player.SetInput(6);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP1).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[6] = true;
+				client->player.SetInput(7);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP2).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[7] = true;
+				client->player.SetInput(8);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 			if (GetKey(olc::Key::NP3).bPressed) {
-				client->SendMSG();
-				client->ListenForMessages();
-				ourDrawPos[8] = true;
+				client->player.SetInput(9);
+				client->SendMessageToServer();
+				if (client->ListenForMessages()) {
+					SetDrawPos(true, client->player.GetInput());
+				}
 			}
 		}
 	DrawBoardState();
@@ -186,9 +204,9 @@ void Game::DrawBoardState()
 void Game::SetDrawPos(bool playerTurn,int pos)
 {
 	if (playerTurn)
-		ourDrawPos[pos] = true;
+		ourDrawPos[pos-1] = true;
 	else
-		enemyDrawPos[pos] = true;
+		enemyDrawPos[pos-1] = true;
 }
 
 void Game::GameOver(bool playerWon)
