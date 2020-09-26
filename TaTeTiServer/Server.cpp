@@ -154,7 +154,3 @@ bool Server::IsPositionAvailable(int pos)
 	}
 	return false;
 }
-
-void Server::HelloThereToAllClients()
-{
-}

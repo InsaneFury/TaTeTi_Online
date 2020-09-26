@@ -58,7 +58,5 @@ public:
 	void Shutdown();
 
 	bool IsPositionAvailable(int pos);
-
-	void HelloThereToAllClients();
 };
 
