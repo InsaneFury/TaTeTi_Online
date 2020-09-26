@@ -13,8 +13,11 @@ class Room
 private:
 	Player playerOne;
 	Player playerTwo;
-	Board board;
+	Board* board;
 public:
+	Room(Player one, Player two);
+	~Room();
 
+	void StartGame();
 };
 

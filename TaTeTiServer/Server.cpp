@@ -106,7 +106,6 @@ int Server::SendMessageTo(Player _player)
 
 int Server::SendMessageToAll(string gameState)
 {
-
 	int iSendResult = 0;
 
 	for (auto iter = clients_addrs.begin(); iter != clients_addrs.end(); iter++)
