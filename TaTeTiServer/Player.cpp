@@ -19,3 +19,8 @@ void Player::SetID(int _ID)
 {
 	data.ID = _ID;
 }
+
+void Player::SetAddress(sockaddr_in _address)
+{
+	data.address = _address;
+}

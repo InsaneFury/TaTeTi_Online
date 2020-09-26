@@ -11,7 +11,7 @@ Server::Server(int _port)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		boardPositions[i] = 0;
+		board[i] = 0;
 	}
 }
 
@@ -60,24 +60,20 @@ void Server::BindSocket()
 
 void Server::Update()
 {
-	if (AcceptNewClient(client_ID))
-	{
-		cout << "Client " + client_ID + player.GetName() + " has been connected to the server" << endl;
-		cout << "Total Clients Connected: " + client_ID + 1 << endl;
-		client_ID++;
+	if (number_of_clients == 2) {
+		SendMessageToAll("Hello ");
+		number_of_clients++;
 	}
 	ListenForMessages();
 }
 
-bool Server::AcceptNewClient(unsigned int& id)
+void Server::AcceptNewClient()
 {
-	clientSocket = accept(listenSocket, (sockaddr*)&from, &dataLenght);
-	if (clientSocket != INVALID_SOCKET) {
-			clients_sockets.insert(std::pair<unsigned int, SOCKET>(id, clientSocket));
-			clients_addrs.push_back(from);
-			return true;
-	}
-	return false;
+		Player tempPlayer = player;
+		clients_addrs.push_back(tempPlayer);
+		cout << "Client " + player.GetName() + " has been connected to the server" << endl;
+		client_ID++;
+		number_of_clients++;
 }
 
 void Server::ListenForMessages()
@@ -91,39 +87,41 @@ void Server::ListenForMessages()
 	}
 	else 
 	{
+		player.SetAddress(from);	
+		AcceptNewClient();
+
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
 
 		//TEST
-		if(IsPositionAvailable(player.GetInput()))
-		SendMessageTo(listenSocket, player,from);
+		/*if(IsPositionAvailable(player.GetInput()))
+		SendMessageTo(listenSocket, player, s);*/
 	}	
 }
 
-int Server::SendMessageTo(SOCKET _currentSocket, Player _player,sockaddr_in _from)
+int Server::SendMessageTo(Player _player)
 {
-	int sendOk = sendto(_currentSocket, (char*)&_player, sizeof(_player), 0, (sockaddr*)&_from, sizeof(_from));
+	int sendOk = sendto(listenSocket, (char*)&_player, sizeof(_player), 0, (sockaddr*)&_player.GetAddress(), sizeof(_player.GetAddress()));
 	if (sendOk == SOCKET_ERROR)
 	std::cout << " SERVER_DEBUG : Can't send msg" << WSAGetLastError << std::endl;
 
 	return sendOk;
 }
 
-int Server::SendMessageToAll(SOCKET _currentSocket, Player _player)
+int Server::SendMessageToAll(string gameState)
 {
-	SOCKET currentSocket;
-	std::map<unsigned int, SOCKET>::iterator iter;
-	int iSendResult;
 
-	for (iter = clients_sockets.begin(); iter != clients_sockets.end(); iter++)
+	int iSendResult = 0;
+
+	for (auto iter = clients_addrs.begin(); iter != clients_addrs.end(); iter++)
 	{
-		currentSocket = iter->second;
-		iSendResult = SendMessageTo(currentSocket, _player, from);
+		player = *iter;
+		player.SetGameState(gameState + player.GetName());
+		iSendResult = SendMessageTo(player);
 
 		if (iSendResult == SOCKET_ERROR)
 		{
 			printf("send failed with error: %d\n", WSAGetLastError());
-			closesocket(currentSocket);
 		}
 	}
 
@@ -149,10 +147,14 @@ void Server::Shutdown()
 
 bool Server::IsPositionAvailable(int pos)
 {
-	if (boardPositions[pos] == 0)
+	if (board[pos] == 0)
 	{
-		boardPositions[pos] = pos;
+		board[pos] = pos;
 		return true;
 	}
 	return false;
+}
+
+void Server::HelloThereToAllClients()
+{
 }

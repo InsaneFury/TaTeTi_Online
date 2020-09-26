@@ -26,13 +26,6 @@ void Client::Initialize()
 
 	WSAEventSelect(sock, EventHandler, (FD_READ | FD_CONNECT | FD_CLOSE));
 
-	if (connect(sock, (sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
-	{ // an error connecting has occurred!
-		std::cout << "Connected to the server!" << std::endl;
-		WSACleanup();
-		return;
-	}
-
 	std::cout << "Ingrese su nombre: " << std::endl;
 	std::string name;
 	std::getline(std::cin, name);
@@ -65,7 +58,8 @@ bool Client::ListenForMessages()
 		WSACleanup();
 		exit(1);
 	}
-	else {	
+	else if (bytesIn >0){	
+		ShowReceivedMessage();
 		return true;
 	}
 	//int bytesIn = recvfrom(sock, dataBuffer, 1024, 0, (sockaddr*)&from, &dataLenght);
@@ -82,9 +76,7 @@ void Client::ListenForEvents()
 
 void Client::ShowReceivedMessage()
 {
-	ZeroMemory(serverIp, 256);
-	inet_ntop(AF_INET, &from.sin_addr, serverIp, 256);
-	std::cout << "Message recv from " << serverIp << " : " << player.GetInput() << std::endl;
+	std::cout << "SERVER: " << player.GetGameState() << std::endl;
 }
 
 void Client::Shutdown()

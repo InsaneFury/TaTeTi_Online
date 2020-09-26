@@ -20,11 +20,11 @@ private:
 	int port;
 	bool shutdown = false;
 	unsigned int client_ID;
-	bool boardPositions[8];
+	bool board[8];
 
 	// Multiple Clients
-	map<unsigned int, SOCKET> clients_sockets;
-	vector<sockaddr_in> clients_addrs; // info on client sockets
+	map<sockaddr, Player> clients_sockets;
+	vector<Player> clients_addrs; // info on client sockets
 	int number_of_clients = 0;
 
 	// Client Data
@@ -49,14 +49,16 @@ public:
 	// Bind socket to ip address and port
 	void BindSocket();
 	//Accept new client and add it to the map
-	bool AcceptNewClient(unsigned int& id);
+	void AcceptNewClient();
 	void ListenForMessages();
-	int SendMessageTo(SOCKET _currentSocket, Player _player, sockaddr_in _from);
-	int SendMessageToAll(SOCKET _currentSocket, Player _player);
+	int SendMessageTo(Player _player);
+	int SendMessageToAll(string gameState);
 
 	// Shutdown winsock & Close socket
 	void Shutdown();
 
 	bool IsPositionAvailable(int pos);
+
+	void HelloThereToAllClients();
 };
 
