@@ -23,8 +23,7 @@ private:
 	bool board[8];
 
 	// Multiple Clients
-	map<sockaddr, Player> clients_sockets;
-	vector<Player> clients_addrs; // info on client sockets
+	map<string,Player> clients_addrs; // info on client sockets
 	int number_of_clients = 0;
 
 	// Client Data

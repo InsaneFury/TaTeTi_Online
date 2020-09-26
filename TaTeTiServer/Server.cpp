@@ -70,7 +70,7 @@ void Server::Update()
 void Server::AcceptNewClient()
 {
 		Player tempPlayer = player;
-		clients_addrs.push_back(tempPlayer);
+		clients_addrs.insert(std::pair<string,Player>(tempPlayer.GetName(), tempPlayer));
 		cout << "Client " + player.GetName() + " has been connected to the server" << endl;
 		client_ID++;
 		number_of_clients++;
@@ -92,10 +92,6 @@ void Server::ListenForMessages()
 
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
-
-		//TEST
-		/*if(IsPositionAvailable(player.GetInput()))
-		SendMessageTo(listenSocket, player, s);*/
 	}	
 }
 
@@ -115,7 +111,7 @@ int Server::SendMessageToAll(string gameState)
 
 	for (auto iter = clients_addrs.begin(); iter != clients_addrs.end(); iter++)
 	{
-		player = *iter;
+		player = iter->second;
 		player.SetGameState(gameState + player.GetName());
 		iSendResult = SendMessageTo(player);
 
