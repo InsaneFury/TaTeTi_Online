@@ -12,7 +12,7 @@ void Player::SetName(std::string _name)
 
 void Player::SetGameState(std::string _gameState)
 {
-	data.gameState = _gameState;
+	data.msg = _gameState;
 }
 
 void Player::SetID(int _ID)
@@ -23,4 +23,9 @@ void Player::SetID(int _ID)
 void Player::SetAddress(sockaddr_in _address)
 {
 	data.address = _address;
+}
+
+void Player::SetClientStatus(CLIENT_STATUS status)
+{
+	data.clientStatus = status;
 }
