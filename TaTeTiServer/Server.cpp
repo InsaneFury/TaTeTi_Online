@@ -7,12 +7,15 @@ Server::Server(int _port)
 	port(_port),
 	listenSocket(INVALID_SOCKET),
 	clientSocket(INVALID_SOCKET),
-	client_ID(1)
+	client_ID(1),
+	dataLenght(0)
 {
 	for (int i = 0; i < 8; i++)
-	{
 		board[i] = 0;
-	}
+	for (int i = 0; i < 1024; i++)
+		dataBuffer[i] = 0;
+	for (int i = 0; i < 256; i++)
+		clientIp[i] = 0;
 }
 
 Server::~Server()
