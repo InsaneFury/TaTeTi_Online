@@ -76,7 +76,7 @@ void Client::ListenForEvents()
 
 void Client::ShowReceivedMessage()
 {
-	std::cout << "SERVER: " << player.GetGameState() << std::endl;
+	std::cout << "SERVER: " << player.GetStatusMessage() << std::endl;
 }
 
 void Client::Shutdown()

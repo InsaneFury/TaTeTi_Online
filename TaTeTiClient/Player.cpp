@@ -10,7 +10,7 @@ void Player::SetName(std::string _name)
 	data.name = _name;
 }
 
-void Player::SetGameState(std::string _msg)
+void Player::SetStatusMessage(std::string _msg)
 {
 	data.msg = _msg;
 }

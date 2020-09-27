@@ -75,19 +75,19 @@ void Server::AcceptNewClient()
 	{
 		if ((clients.find(player.GetID()) != clients.end())) 
 		{
-			cout << "Client already exist" << endl;
+			cout << endl;
+			cout << "Client "+player.GetName() + " says:" << endl;
 			return;
 		}
-		cout << player.GetID();
-		cout << client_ID;
 	}
 	Player tempPlayer = player;
 	clients.insert(std::pair<int,Player>(tempPlayer.GetID(), tempPlayer));
+	cout << endl;
 	cout << "Client " + player.GetName() + " has been connected to the server" << endl;
 	client_ID++;
 	clientsConnected++;
 	player.SetClientStatus(CLIENT_STATUS::IN_LOBBY);
-	player.SetGameState("Welcome!");
+	player.SetStatusMessage("IN LOBBY");
 	SendMessageTo(player);
 }
 
@@ -126,7 +126,7 @@ int Server::SendMessageToAll(string gameState)
 	for (auto iter = clients.begin(); iter != clients.end(); iter++)
 	{
 		player = iter->second;
-		player.SetGameState(gameState + player.GetName());
+		player.SetStatusMessage(gameState + player.GetName());
 		iSendResult = SendMessageTo(player);
 
 		if (iSendResult == SOCKET_ERROR)
@@ -141,7 +141,7 @@ int Server::SendMessageToAll(string gameState)
 void Server::ShowReceivedMessage()
 {
 	inet_ntop(AF_INET, &from.sin_addr, clientIp, 256);
-	cout << "Message recv from " << clientIp << " : " << player.GetInput() << endl;
+	cout << clientIp << " : " << player.GetInput() << endl;
 }
 
 void Server::Shutdown()
