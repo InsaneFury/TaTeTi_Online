@@ -24,9 +24,9 @@ private:
 	bool board[8];
 
 	// Multiple Clients
-	map<int,Player> clients_addrs; // info on client sockets
-	int number_of_clients = 0;
-	map<int, Room> roomsInGame;
+	map<int,Player> clients;
+	int clientsConnected = 0;
+	map<int, Room> roomsPlaying;
 
 	// Client Data
 	SOCKET clientSocket;

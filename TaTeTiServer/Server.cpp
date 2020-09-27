@@ -60,10 +60,6 @@ void Server::BindSocket()
 
 void Server::Update()
 {
-	if (number_of_clients == 2) {
-		SendMessageToAll("Hello ");
-		number_of_clients++;
-	}
 	ListenForMessages();
 }
 
@@ -72,9 +68,9 @@ void Server::AcceptNewClient()
 	if (player.GetID() == 0) {
 		player.SetID(client_ID);
 	}
-	if (clients_addrs.size() > 0) 
+	if (clients.size() > 0) 
 	{
-		if ((clients_addrs.find(player.GetID()) != clients_addrs.end())) 
+		if ((clients.find(player.GetID()) != clients.end())) 
 		{
 			cout << "Client already exist" << endl;
 			return;
@@ -83,10 +79,10 @@ void Server::AcceptNewClient()
 		cout << client_ID;
 	}
 	Player tempPlayer = player;
-	clients_addrs.insert(std::pair<int,Player>(tempPlayer.GetID(), tempPlayer));
+	clients.insert(std::pair<int,Player>(tempPlayer.GetID(), tempPlayer));
 	cout << "Client " + player.GetName() + " has been connected to the server" << endl;
 	client_ID++;
-	number_of_clients++;
+	clientsConnected++;
 	player.SetGameState("Welcome!");
 	SendMessageTo(player);
 }
@@ -123,7 +119,7 @@ int Server::SendMessageToAll(string gameState)
 {
 	int iSendResult = 0;
 
-	for (auto iter = clients_addrs.begin(); iter != clients_addrs.end(); iter++)
+	for (auto iter = clients.begin(); iter != clients.end(); iter++)
 	{
 		player = iter->second;
 		player.SetGameState(gameState + player.GetName());
