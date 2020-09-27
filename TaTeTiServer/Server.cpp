@@ -83,6 +83,7 @@ void Server::AcceptNewClient()
 	cout << "Client " + player.GetName() + " has been connected to the server" << endl;
 	client_ID++;
 	clientsConnected++;
+	player.SetClientStatus(CLIENT_STATUS::IN_LOBBY);
 	player.SetGameState("Welcome!");
 	SendMessageTo(player);
 }

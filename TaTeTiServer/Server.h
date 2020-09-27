@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 #include <WS2tcpip.h>
-#include "Player.h"
+#include "../TaTeTiClient/Player.h"
 #include "Room.h"
 
 #pragma comment (lib,"ws2_32.lib")

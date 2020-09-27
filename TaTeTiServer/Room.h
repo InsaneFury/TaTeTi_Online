@@ -1,6 +1,6 @@
 #pragma once
 #include "Board.h"
-#include "Player.h"
+#include "../TaTeTiClient/Player.h"
 
 enum PlayerTurn
 {

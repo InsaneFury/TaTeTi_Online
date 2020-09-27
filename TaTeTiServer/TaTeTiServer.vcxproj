@@ -142,14 +142,12 @@
     <ClCompile Include="..\TaTeTiClient\Player.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TaTeTiClient\Player.h" />
     <ClInclude Include="Board.h" />
-    <ClInclude Include="NetworkServices.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>

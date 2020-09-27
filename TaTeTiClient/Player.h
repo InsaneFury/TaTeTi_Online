@@ -4,6 +4,7 @@
 
 enum class CLIENT_STATUS
 {
+	NONE,
 	IN_LOBBY,
 	READY,
 	IN_GAME
@@ -17,7 +18,7 @@ private:
 		int input = 0;
 		std::string name = "";
 		std::string msg = "";
-		CLIENT_STATUS clientStatus;
+		CLIENT_STATUS clientStatus = CLIENT_STATUS::NONE;
 		int ID = 0;
 		bool playerTurn = true;
 		sockaddr_in address;

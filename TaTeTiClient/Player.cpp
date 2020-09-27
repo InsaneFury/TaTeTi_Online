@@ -10,9 +10,9 @@ void Player::SetName(std::string _name)
 	data.name = _name;
 }
 
-void Player::SetGameState(std::string _gameState)
+void Player::SetGameState(std::string _msg)
 {
-	data.msg = _gameState;
+	data.msg = _msg;
 }
 
 void Player::SetID(int _ID)
