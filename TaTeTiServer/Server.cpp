@@ -7,7 +7,7 @@ Server::Server(int _port)
 	port(_port),
 	listenSocket(INVALID_SOCKET),
 	clientSocket(INVALID_SOCKET),
-	client_ID(0)
+	client_ID(1)
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -69,11 +69,26 @@ void Server::Update()
 
 void Server::AcceptNewClient()
 {
-		Player tempPlayer = player;
-		clients_addrs.insert(std::pair<string,Player>(tempPlayer.GetName(), tempPlayer));
-		cout << "Client " + player.GetName() + " has been connected to the server" << endl;
-		client_ID++;
-		number_of_clients++;
+	if (player.GetID() == 0) {
+		player.SetID(client_ID);
+	}
+	if (clients_addrs.size() > 0) 
+	{
+		if ((clients_addrs.find(player.GetID()) != clients_addrs.end())) 
+		{
+			cout << "Client already exist" << endl;
+			return;
+		}
+		cout << player.GetID();
+		cout << client_ID;
+	}
+	Player tempPlayer = player;
+	clients_addrs.insert(std::pair<int,Player>(tempPlayer.GetID(), tempPlayer));
+	cout << "Client " + player.GetName() + " has been connected to the server" << endl;
+	client_ID++;
+	number_of_clients++;
+	player.SetGameState("Welcome!");
+	SendMessageTo(player);
 }
 
 void Server::ListenForMessages()
@@ -87,9 +102,9 @@ void Server::ListenForMessages()
 	}
 	else 
 	{
-		player.SetAddress(from);	
-		AcceptNewClient();
-
+		player.SetAddress(from);
+	    AcceptNewClient();
+			
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
 	}	

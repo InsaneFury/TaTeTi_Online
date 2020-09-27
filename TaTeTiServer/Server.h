@@ -4,6 +4,7 @@
 #include <vector>
 #include <WS2tcpip.h>
 #include "Player.h"
+#include "Room.h"
 
 #pragma comment (lib,"ws2_32.lib")
 
@@ -23,8 +24,9 @@ private:
 	bool board[8];
 
 	// Multiple Clients
-	map<string,Player> clients_addrs; // info on client sockets
+	map<int,Player> clients_addrs; // info on client sockets
 	int number_of_clients = 0;
+	map<int, Room> roomsInGame;
 
 	// Client Data
 	SOCKET clientSocket;

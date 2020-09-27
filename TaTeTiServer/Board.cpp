@@ -37,7 +37,6 @@ bool Board::CheckPlayerWin()
 			return true;
 		}
 	}
-
 	//check diagonals
 	bool diagonal1 = gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2];
 	bool diagonal2 = gameBoard[0][2] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][0];
