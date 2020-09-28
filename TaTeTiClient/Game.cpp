@@ -76,6 +76,9 @@ bool Game::OnUserUpdate(float fElapsedTime)
 			if (GetKey(olc::Key::NP1).bPressed) {
 				client->player.SetInput(7);
 				client->SendMessageToServer();
+				if (client->player.GetClientStatus() == CLIENT_STATUS::IN_LOBBY) {
+					std::cout << "ESTAS EN LOBBY PAPURRI" << std::endl;
+				}
 				if (client->ListenForMessages()) {
 					SetDrawPos(true, client->player.GetInput());
 				}
@@ -93,6 +96,10 @@ bool Game::OnUserUpdate(float fElapsedTime)
 				if (client->ListenForMessages()) {
 					SetDrawPos(true, client->player.GetInput());
 				}
+			}
+			if (GetKey(olc::Key::R).bPressed) {
+				client->player.SetClientStatus(CLIENT_STATUS::READY);
+				client->SendMessageToServer();
 			}
 		}
 	DrawBoardState();

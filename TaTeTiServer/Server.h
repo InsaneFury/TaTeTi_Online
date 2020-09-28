@@ -4,11 +4,16 @@
 #include <vector>
 #include <WS2tcpip.h>
 #include "../TaTeTiClient/Player.h"
-#include "Room.h"
 
 #pragma comment (lib,"ws2_32.lib")
 
 using namespace std;
+
+enum PlayerTurn
+{
+	PLAYER_ONE = 1,
+	PLAYER_TWO
+};
 
 class Server
 {	
@@ -25,8 +30,9 @@ private:
 
 	// Multiple Clients
 	map<int,Player> clients;
+	map<int, Player> clientsPlaying;
 	int clientsConnected = 0;
-	map<int, Room> roomsPlaying;
+	
 
 	// Client Data
 	SOCKET clientSocket;
@@ -58,6 +64,7 @@ public:
 	// Shutdown winsock & Close socket
 	void Shutdown();
 
-	bool IsPositionAvailable(int pos);
+	void TaTeTiUpdate();
+	void TaTeTiTurn(Player& playerOne, Player& playerTwo);
 };
 

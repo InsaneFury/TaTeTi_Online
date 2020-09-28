@@ -7,7 +7,7 @@ Server::Server(int _port)
 	port(_port),
 	listenSocket(INVALID_SOCKET),
 	clientSocket(INVALID_SOCKET),
-	client_ID(1),
+	client_ID(0),
 	dataLenght(0)
 {
 	for (int i = 0; i < 8; i++)
@@ -63,12 +63,13 @@ void Server::BindSocket()
 
 void Server::Update()
 {
+	// Escucho y agrego nuevos clientes
 	ListenForMessages();
 }
 
 void Server::AcceptNewClient()
 {
-	if (player.GetID() == 0) {
+	if (player.GetID() == -1) {
 		player.SetID(client_ID);
 	}
 	if (clients.size() > 0) 
@@ -80,10 +81,10 @@ void Server::AcceptNewClient()
 			return;
 		}
 	}
-	Player tempPlayer = player;
-	clients.insert(std::pair<int,Player>(tempPlayer.GetID(), tempPlayer));
+
+	clients[player.GetID()] = player;
 	cout << endl;
-	cout << "Client " + player.GetName() + " has been connected to the server" << endl;
+	cout << "Client " + clients[player.GetID()].GetName() + " has been connected to the server" << endl;
 	client_ID++;
 	clientsConnected++;
 	player.SetClientStatus(CLIENT_STATUS::IN_LOBBY);
@@ -107,6 +108,9 @@ void Server::ListenForMessages()
 			
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
+
+		// Recorro todo los clientes en busca de gente en estado ready 
+		TaTeTiUpdate();
 	}	
 }
 
@@ -155,12 +159,62 @@ void Server::Shutdown()
 	WSACleanup();
 }
 
-bool Server::IsPositionAvailable(int pos)
+void Server::TaTeTiUpdate()
 {
-	if (board[pos] == 0)
+	for (auto iter = clients.begin(); iter != clients.end(); iter++)
 	{
-		board[pos] = pos;
-		return true;
+		iter->second.SetClientStatus(CLIENT_STATUS::READY);
+		cout << (int)iter->second.GetClientStatus() << endl;
+		iter->second.SetStatusMessage("READY");
+		SendMessageTo(iter->second);
+
+		if (iter->second.GetClientStatus() == CLIENT_STATUS::READY) 
+		{
+			if (clientsPlaying.find(iter->first) == clientsPlaying.end()) 
+			{
+				clientsPlaying[iter->second.GetID()] = iter->second;
+				if(clientsPlaying.size() %2 == 0)
+				{
+					//Crear room
+					auto tempIter = iter--;
+					tempIter->second.SetStatusMessage("IN GAME");
+					iter->second.SetStatusMessage("IN GAME");
+
+					SendMessageTo(tempIter->second);
+					SendMessageTo(iter->second);
+
+					TaTeTiTurn(iter->second, tempIter->second);
+				}
+			}
+		}
 	}
-	return false;
+
+	for (auto iter2 = clientsPlaying.begin(); iter2 != clientsPlaying.end(); iter2++)
+	{
+
+	}
+
+}
+
+void Server::TaTeTiTurn(Player &playerOne, Player &playerTwo)
+{
+	int turn = rand() % 100 + 1;
+	if (turn > 50) 
+	{
+		playerOne.SetClientStatus(CLIENT_STATUS::TURN);
+		playerTwo.SetClientStatus(CLIENT_STATUS::WAITING);
+		playerOne.SetStatusMessage("YOUR TURN");
+		playerTwo.SetStatusMessage("WAIT FOR TURN");
+		SendMessageTo(playerOne);
+		SendMessageTo(playerTwo);
+	}
+	else 
+	{
+		playerOne.SetClientStatus(CLIENT_STATUS::WAITING);
+		playerTwo.SetClientStatus(CLIENT_STATUS::TURN);
+		playerOne.SetStatusMessage("WAIT FOR TURN");
+		playerTwo.SetStatusMessage("YOUR TURN");
+		SendMessageTo(playerOne);
+		SendMessageTo(playerTwo);
+	}
 }

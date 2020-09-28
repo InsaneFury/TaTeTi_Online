@@ -142,13 +142,11 @@
     <ClCompile Include="..\TaTeTiClient\Player.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Room.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TaTeTiClient\Player.h" />
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Room.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

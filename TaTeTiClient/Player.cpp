@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include <iostream>
 void Player::SetInput(int _input)
 {
 	data.input = _input;
@@ -27,5 +27,6 @@ void Player::SetAddress(sockaddr_in _address)
 
 void Player::SetClientStatus(CLIENT_STATUS status)
 {
+	std::cout << "status: "<<(int)status << std::endl;
 	data.clientStatus = status;
 }
