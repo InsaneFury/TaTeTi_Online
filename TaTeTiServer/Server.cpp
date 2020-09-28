@@ -10,8 +10,6 @@ Server::Server(int _port)
 	client_ID(0),
 	dataLenght(0)
 {
-	for (int i = 0; i < 8; i++)
-		board[i] = 0;
 	for (int i = 0; i < 1024; i++)
 		dataBuffer[i] = 0;
 	for (int i = 0; i < 256; i++)
@@ -65,6 +63,8 @@ void Server::Update()
 {
 	// Escucho y agrego nuevos clientes
 	ListenForMessages();
+	// Recorro todo los clientes en busca de gente en estado ready 
+	TaTeTiUpdate();
 }
 
 void Server::AcceptNewClient()
@@ -109,8 +109,6 @@ void Server::ListenForMessages()
 		ZeroMemory(clientIp, 256);
 		ShowReceivedMessage();
 
-		// Recorro todo los clientes en busca de gente en estado ready 
-		TaTeTiUpdate();
 	}	
 }
 
@@ -178,28 +176,55 @@ void Server::TaTeTiUpdate()
 				clientsPlaying[iter->second.GetID()] = iter->second;
 				if(clientsPlaying.size() %2 == 0)
 				{
-					//Crear room
+					//Crear board
+					Board board;
+					boards[boardsIDs] = board;
 					auto tempIter = iter--;
+					iter->second.SetBoardID(boardsIDs);
+					tempIter->second.SetBoardID(boardsIDs);
+					boardsIDs++;
+
+					tempIter->second.SetEnemyID(iter->second.GetID());
+					iter->second.SetEnemyID(tempIter->second.GetID());
+
+					iter->second.SetSkin(1);
+					tempIter->second.SetSkin(2);
+
 					tempIter->second.SetStatusMessage("IN GAME");
 					iter->second.SetStatusMessage("IN GAME");
 
+					SendMessageTo(tempIter->second);
+					SendMessageTo(iter->second);
+
 					tempIter->second.SetClientStatus(CLIENT_STATUS::IN_GAME);
 					iter->second.SetClientStatus(CLIENT_STATUS::IN_GAME);
+
+					tempIter->second.SetStatusMessage("VS " + iter->second.GetName());
+					iter->second.SetStatusMessage("VS " + tempIter->second.GetName());
 
 					SendMessageTo(tempIter->second);
 					SendMessageTo(iter->second);
 
 					RandomTaTeTiTurn(iter->second, tempIter->second);
+
 				}
 			}
 		}
 	}
 
+	//ListenForMessages();
+
 	for (auto iter2 = clientsPlaying.begin(); iter2 != clientsPlaying.end(); iter2++)
 	{
-
+		if(iter2->second.GetTurn())
+		{
+			iter2->second.SetInput(player.GetInput());
+			if(boards[player.GetBoardID()].SetPlayerMove(player.GetInput(),player.GetSkin()))
+			{
+				TaTeTiTurn(iter2->second, false, clientsPlaying[iter2->second.GetEnemyID()], true);
+			}
+		}
 	}
-
 }
 
 void Server::RandomTaTeTiTurn(Player &playerOne, Player &playerTwo)

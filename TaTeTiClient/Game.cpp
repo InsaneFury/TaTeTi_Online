@@ -3,7 +3,7 @@
 Game::Game()
 {
 	// Name you application
-	sAppName = "TaTeTi Online";
+	
 	for (int i = 0; i < 9; i++)
 	{
 		ourDrawPos[i] = false;
@@ -20,6 +20,7 @@ bool Game::OnUserCreate()
 {
 	client = new Client(8900);
 	client->Initialize();
+	sAppName = client->player.GetName() + " TaTeTi";
 	return true;
 }
 
@@ -28,8 +29,12 @@ bool Game::OnUserUpdate(float fElapsedTime)
 	// Erase previous frame
 	Clear(olc::WHITE);
 	client->ListenForMessages();
+	if (client->player.GetClientStatus() == CLIENT_STATUS::IN_GAME)
+	{
+		SetDrawPos(false,client->player.GetInput());
+	}
 	if (gameStarted) {
-		if (IsFocused())
+		if (IsFocused() && client->player.GetTurn())
 		{
 			if (GetKey(olc::Key::NP7).bPressed) {
 				client->player.SetInput(1);
@@ -76,9 +81,6 @@ bool Game::OnUserUpdate(float fElapsedTime)
 			if (GetKey(olc::Key::NP1).bPressed) {
 				client->player.SetInput(7);
 				client->SendMessageToServer();
-				if (client->player.GetClientStatus() == CLIENT_STATUS::IN_LOBBY) {
-					std::cout << "ESTAS EN LOBBY PAPURRI" << std::endl;
-				}
 				if (client->ListenForMessages()) {
 					SetDrawPos(true, client->player.GetInput());
 				}
@@ -96,10 +98,6 @@ bool Game::OnUserUpdate(float fElapsedTime)
 				if (client->ListenForMessages()) {
 					SetDrawPos(true, client->player.GetInput());
 				}
-			}
-			if (GetKey(olc::Key::R).bPressed) {
-				client->player.SetClientStatus(CLIENT_STATUS::READY);
-				client->SendMessageToServer();
 			}
 		}
 	DrawBoardState();

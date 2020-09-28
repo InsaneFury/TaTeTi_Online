@@ -5,14 +5,86 @@ Board::Board()
 	ResetBoard();
 }
 
-bool Board::SetPlayerMove(int x, int y, int playerTurn)
+bool Board::SetPlayerMove(int move, int playerSkin)
 {
-	if (gameBoard[x][y] == 0)
+	switch (move)
 	{
-		gameBoard[x][y] = playerTurn;
-		return true;
+	case 1:
+		if(gameBoard[2][0] == 0)
+		{
+			gameBoard[2][0] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 2:
+		if (gameBoard[2][1] == 0)
+		{
+			gameBoard[2][1] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 3:
+		if (gameBoard[2][2] == 0)
+		{
+			gameBoard[2][2] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 4:
+		if (gameBoard[1][0] == 0)
+		{
+			gameBoard[1][0] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 5:
+		if (gameBoard[1][1] == 0)
+		{
+			gameBoard[1][1] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 6:
+		if (gameBoard[1][2] == 0)
+		{
+			gameBoard[1][2] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 7:
+		if (gameBoard[0][0] == 0)
+		{
+			gameBoard[0][0] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 8:
+		if (gameBoard[0][1] == 0)
+		{
+			gameBoard[0][1] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	case 9:
+		if (gameBoard[0][2] == 0)
+		{
+			gameBoard[0][2] = playerSkin;
+			return true;
+		}
+		return false;
+		break;
+	default:
+		return false;
+		break;
 	}
-	return false;
 }
 
 void Board::ResetBoard()

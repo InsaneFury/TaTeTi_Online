@@ -34,3 +34,18 @@ void Player::SetTurn(bool turn)
 {
 	data.playerTurn = turn;
 }
+
+void Player::SetBoardID(int _id)
+{
+	data.boardID = _id;
+}
+
+void Player::SetSkin(int skin)
+{
+	data.playerSkin = skin;
+}
+
+void Player::SetEnemyID(int _id)
+{
+	data.enemyID = _id;
+}

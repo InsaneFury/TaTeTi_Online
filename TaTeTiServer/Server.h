@@ -4,6 +4,7 @@
 #include <vector>
 #include <WS2tcpip.h>
 #include "../TaTeTiClient/Player.h"
+#include "Board.h"
 
 #pragma comment (lib,"ws2_32.lib")
 
@@ -26,13 +27,13 @@ private:
 	int port;
 	bool shutdown = false;
 	unsigned int client_ID;
-	bool board[8];
 
 	// Multiple Clients
 	map<int,Player> clients;
 	map<int, Player> clientsPlaying;
 	int clientsConnected = 0;
-	
+	map<int, Board> boards;
+	int boardsIDs = 0;
 
 	// Client Data
 	SOCKET clientSocket;
