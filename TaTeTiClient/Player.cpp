@@ -29,3 +29,8 @@ void Player::SetClientStatus(CLIENT_STATUS status)
 {
 	data.clientStatus = status;
 }
+
+void Player::SetTurn(bool turn)
+{
+	data.playerTurn = turn;
+}

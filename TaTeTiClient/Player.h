@@ -36,11 +36,13 @@ public:
 	void SetID(int _ID);
 	void SetAddress(sockaddr_in _address);
 	void SetClientStatus(CLIENT_STATUS status);
+	void SetTurn(bool turn);
 	inline int GetInput() { return data.input; };
 	inline std::string GetName() { return data.name; };
 	inline std::string GetStatusMessage() { return data.msg; };
 	inline int GetID() { return data.ID; };
 	inline sockaddr_in GetAddress() { return data.address; };
 	inline CLIENT_STATUS GetClientStatus() { return data.clientStatus; };
+	inline bool GetTurn() { return data.playerTurn; };
 };
 

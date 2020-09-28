@@ -65,6 +65,7 @@ public:
 	void Shutdown();
 
 	void TaTeTiUpdate();
-	void TaTeTiTurn(Player& playerOne, Player& playerTwo);
+	void RandomTaTeTiTurn(Player& playerOne, Player& playerTwo);
+	void TaTeTiTurn(Player& playerOne,bool turnOne, Player& playerTwo, bool turnTwo);
 };
 

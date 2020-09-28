@@ -166,7 +166,7 @@ void Server::TaTeTiUpdate()
 		if(iter->second.GetClientStatus() < CLIENT_STATUS::READY)
 		{
 			iter->second.SetClientStatus(CLIENT_STATUS::READY);
-			cout << "STATUS IN SERVER 2:"<<(int)iter->second.GetClientStatus() << endl;
+			cout << "STATUS IN SERVER: "<<(int)iter->second.GetClientStatus() << endl;
 			iter->second.SetStatusMessage("READY");
 			SendMessageTo(iter->second);
 		}
@@ -183,10 +183,13 @@ void Server::TaTeTiUpdate()
 					tempIter->second.SetStatusMessage("IN GAME");
 					iter->second.SetStatusMessage("IN GAME");
 
+					tempIter->second.SetClientStatus(CLIENT_STATUS::IN_GAME);
+					iter->second.SetClientStatus(CLIENT_STATUS::IN_GAME);
+
 					SendMessageTo(tempIter->second);
 					SendMessageTo(iter->second);
 
-					TaTeTiTurn(iter->second, tempIter->second);
+					RandomTaTeTiTurn(iter->second, tempIter->second);
 				}
 			}
 		}
@@ -199,25 +202,35 @@ void Server::TaTeTiUpdate()
 
 }
 
-void Server::TaTeTiTurn(Player &playerOne, Player &playerTwo)
+void Server::RandomTaTeTiTurn(Player &playerOne, Player &playerTwo)
 {
 	int turn = rand() % 100 + 1;
 	if (turn > 50) 
+		TaTeTiTurn(playerOne, true, playerTwo, false);
+	else 
+		TaTeTiTurn(playerOne, false, playerTwo, true);
+}
+
+void Server::TaTeTiTurn(Player& playerOne, bool turnOne, Player& playerTwo, bool turnTwo)
+{
+	if(turnOne)
 	{
+		playerOne.SetTurn(turnOne);
+		playerTwo.SetTurn(turnTwo);
 		playerOne.SetClientStatus(CLIENT_STATUS::TURN);
 		playerTwo.SetClientStatus(CLIENT_STATUS::WAITING);
 		playerOne.SetStatusMessage("YOUR TURN");
 		playerTwo.SetStatusMessage("WAIT FOR TURN");
-		SendMessageTo(playerOne);
-		SendMessageTo(playerTwo);
 	}
 	else 
 	{
+		playerOne.SetTurn(turnOne);
+		playerTwo.SetTurn(turnTwo);
 		playerOne.SetClientStatus(CLIENT_STATUS::WAITING);
 		playerTwo.SetClientStatus(CLIENT_STATUS::TURN);
 		playerOne.SetStatusMessage("WAIT FOR TURN");
 		playerTwo.SetStatusMessage("YOUR TURN");
-		SendMessageTo(playerOne);
-		SendMessageTo(playerTwo);
 	}
+	SendMessageTo(playerOne);
+	SendMessageTo(playerTwo);
 }
