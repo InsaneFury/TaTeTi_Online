@@ -163,10 +163,13 @@ void Server::TaTeTiUpdate()
 {
 	for (auto iter = clients.begin(); iter != clients.end(); iter++)
 	{
-		iter->second.SetClientStatus(CLIENT_STATUS::READY);
-		cout << (int)iter->second.GetClientStatus() << endl;
-		iter->second.SetStatusMessage("READY");
-		SendMessageTo(iter->second);
+		if(iter->second.GetClientStatus() < CLIENT_STATUS::READY)
+		{
+			iter->second.SetClientStatus(CLIENT_STATUS::READY);
+			cout << "STATUS IN SERVER 2:"<<(int)iter->second.GetClientStatus() << endl;
+			iter->second.SetStatusMessage("READY");
+			SendMessageTo(iter->second);
+		}
 
 		if (iter->second.GetClientStatus() == CLIENT_STATUS::READY) 
 		{
